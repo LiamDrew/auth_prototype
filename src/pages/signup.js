@@ -11,6 +11,7 @@ class UserData extends React.Component {
       first: "",
       email: "",
       age: "",
+      password: "",
       //optional
       phone: "",
       //at the moment, I am only using one toAdd for all of the different inputs
@@ -20,7 +21,10 @@ class UserData extends React.Component {
     this.firstNameChange = this.firstNameChange.bind(this);
     this.emailChange = this.emailChange.bind(this);
     this.ageChange = this.ageChange.bind(this);
+    this.passwordChange = this.passwordChange.bind(this);
+
     this.createAccountHandler = this.createAccountHandler.bind(this);
+
   }
 
   firstNameChange(e){
@@ -35,52 +39,37 @@ class UserData extends React.Component {
     this.setState({age: e.target.value})
   }
 
+  passwordChange(e){
+    this.setState({password: e.target.value})
+  }
+
   // createAccount(){
   //
   // }
 
   createAccountHandler(){
-    let newAccount = {
-      name: this.state.first,
-      email: this.state.email,
-      age: this.state.age
-    }
 
-    console.log('creating', newAccount)
+    console.log('creating', this.state.first, 'account')
     fetch('http://localhost:8080', {
       method: 'post',
       headers: {'Content-Type': 'application/json'},
 
       body: JSON.stringify({
-        account: newAccount
+        name: this.state.first,
+        // email: this.state.email,
+        // age: this.state.age,
+        password: this.state.password
       }),
     })
 
     .then(res => res.text())
     .then(res => JSON.parse(res))
     .then(res => {
-      console.log('server updated')
+      console.log('server updated', this.state.first)
       // console.log('recieved', res.test)
     })
   }
 
-
-  callAPI(){
-    fetch('http://localhost:8080', {
-          method: 'get'
-        })
-        //I don't understand why this works, but it works
-        //this takes the
-          .then(res => res.text())
-          .then(res => JSON.parse(res))
-          .then(res => {
-            console.log('recieved', res.test)
-          })
-    }
-
-  componentDidMount(){
-    this.callAPI()
-  }
 
   render(){
 
@@ -98,7 +87,7 @@ class UserData extends React.Component {
         }
         />
 
-        <input
+        {/* <input
         id= "submitLastName"
         placeholder = "Email"
         //not exactly sure what this does
@@ -108,11 +97,23 @@ class UserData extends React.Component {
         onChange = {
           e => this.emailChange(e)
         }
+        /> */}
+
+        <input
+        id= "submitPassword"
+        placeholder = "Enter Password"
+        //not exactly sure what this does
+        value = {this.state.value}
+
+        //not sure if I need this
+        onChange = {
+          e => this.passwordChange(e)
+        }
         />
 
         <button
         id="giveName" type="submit" onClick={this.createAccountHandler}>
-        <NavLink to="/account">Create Account</NavLink>
+        <NavLink to="/signin">Create Account</NavLink>
 
         </button>
 
