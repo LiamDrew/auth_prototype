@@ -2,6 +2,10 @@
 
 import React from 'react';
 
+import Cookies from 'universal-cookie';
+
+const cookies = new Cookies();
+
 class Settings extends React.Component {
   //i will need to figure out ids for the delete part
   constructor(props){
@@ -27,15 +31,19 @@ class Settings extends React.Component {
           .then(res => res.text())
           .then(res => JSON.parse(res))
           .then(res => {
-            console.log('recieved', res.test)
+            // console.log('recieved', res.test)
+            // console.log(cookies.get('newCookie'));
+
           })
     }
 
   componentDidMount(){
-    this.callAPI()
+    alert('account page loaded')
+    // this.callAPI()
   }
 
   deleteAllAccounts(){
+    console.log('DELETE ALL CALLED')
     fetch('http://localhost:8080/account', {
       method: 'delete',
       headers: {'Content-Type': 'application/json'},
@@ -43,11 +51,11 @@ class Settings extends React.Component {
       body: JSON.stringify({
         deleteAll: true,
         deleteID: ''
-      }),
+      })
     })
 
     .then(res => res.text())
-    .then(res => JSON.parse(res))
+    // .then(res => JSON.parse(res))
     .then(res => {
       console.log('deleting item', res.test)
       // console.log('recieved', res.test)
@@ -55,21 +63,22 @@ class Settings extends React.Component {
   }
 
   deleteAccount(){
-    fetch('http://localhost:8080', {
+    console.log('deleting', cookies.get('userID') )
+    fetch('http://localhost:8080/account', {
       method: 'delete',
       headers: {'Content-Type': 'application/json'},
 
       body: JSON.stringify({
         deleteAll: false,
-        deleteID: 'myUser'
-      }),
+        deleteID: cookies.get('userID')
+      })
     })
 
     .then(res => res.text())
     .then(res => JSON.parse(res))
     .then(res => {
       console.log('deleting item')
-      // console.log('recieved', res.test)
+      console.log('recieved', res.test)
     })
 
     //don't forget to bind function
@@ -85,14 +94,5 @@ class Settings extends React.Component {
   }
 }
 
-//change home to positive
-const Account = function() {
-    return (
-       <div>
-          <h1>This is your Account</h1>
-          <Settings/>
-       </div>
-    );
-}
 
-export default Account;
+export default Settings;

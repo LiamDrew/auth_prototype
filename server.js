@@ -2,6 +2,9 @@
 const express = require('express');
 
 const session = require('express-session');
+
+const cookieParser = require('cookie-parser')
+
 const app = express();
 //I kinda threw this together from my code for sockets, not sure exactly what I need
 // const http = require('http').createServer(app);
@@ -9,14 +12,14 @@ const app = express();
 // const path = require('path')
 app.use(express.json());
 
-app.use(session({
-  name: 'session-id',
-  timestamp: '',
-  username: '',
-  secret: 'quiet', 
-  saveUninitialized: true, 
-  resave: true
-}));
+app.use(cookieParser());
+
+// app.use(session({
+//   name: 'session-id',
+//   secret: 'quiet', 
+//   saveUninitialized: true, 
+//   resave: true
+// }));
 
 // Allows cross origin communication
 const cors = require('cors');
@@ -43,20 +46,22 @@ function createMaster(){
 
 
 app.get('/', function(req,res,next){
-  console.log(req.session);
+  res.cookie('myname', 'cookievalue', {
+  })
   console.log("gethappend")
-  // res.send({test: 'unique server message2'})
   profileSchema.find()
   .then(doc =>{
     res.send({test: doc})
+    // res.cookie('name': 'express').send('cookie set');
+    // res.cookie('rememberme', '1').send();
+
   })
   console.log('sends message')
 })
 
 
 app.post('/', function(req, res, next){
-  req.session.timestamp = Date.now();
-  console.log(req.session)
+
   console.log('POST CALLED')
   if (req.body.verify === true){
     profileSchema.find()
@@ -65,11 +70,9 @@ app.post('/', function(req, res, next){
       for (let i = 0; i<doc.length; i++){
         if (req.body.name === doc[i].name){
           if (req.body.password === doc[i].password){
-            req.session.username = req.body.name;
             res.send({
               verified: true,
               message: 'none',
-              cookie: req.session
             })
           }
 
@@ -77,7 +80,6 @@ app.post('/', function(req, res, next){
             res.send({
               verified: false,
               message: 'password incorrect',
-              cookie: req.session
             })
           }
         }
@@ -126,8 +128,9 @@ app.post('/', function(req, res, next){
 //   console.log(req.body.name)
 // })
 
-app.delete('/accounts', function(req, res, next){
-  if (req.body.deleteAll == true){
+app.delete('/account', function(req, res, next){
+  console.log('delete GETTING called')
+  if (req.body.deleteAll === true){
     profileSchema.deleteMany({admin: false})
     // profileSchema.deleteMany()
     .then(() =>{
@@ -140,6 +143,7 @@ app.delete('/accounts', function(req, res, next){
 
   else{
     profileSchema.deleteOne({name: req.body.deleteID})
+
     // account.findOneAndRemove({name: req.body.deleteID})
 
     //delete one:

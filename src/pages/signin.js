@@ -1,8 +1,17 @@
 //this will need to be built out link singup.js
 
 import React from 'react';
-
 import { Redirect } from 'react-router-dom';
+
+import md5 from 'md5';
+
+// import Constants from '../utils/constants'
+
+
+
+import Cookies from 'universal-cookie';
+const cookies = new Cookies();
+
 
 
 class LoginData extends React.Component {
@@ -51,8 +60,8 @@ class LoginData extends React.Component {
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
               verify: true,
-              name: this.state.first,
-              password: this.state.password
+              name: md5(this.state.first),
+              password: md5(this.state.password)
             })
           })
 
@@ -63,6 +72,8 @@ class LoginData extends React.Component {
         console.log('MESSAGE CHECK', res.message);
         if (res.verified === true){
           this.setState({loggedIn: true})
+          cookies.set('userID', md5(this.state.first))
+          this.props.checkSignIn(this.state.loggedIn)
         }
           })
               // for (let i = 0; i < res.test.length; i++){
@@ -136,19 +147,5 @@ class LoginData extends React.Component {
 
 
 }
-//change home to positive
 
-const SignIn = function() {
-    return (
-       <div>
-          <h1>You can sign in here</h1>
-          <LoginData />
-       </div>
-    );
-}
-
-// let myvar = new LoginData('test')
-
-// console.log(myvar.state.loggedIn)
-
-export default SignIn;
+export default LoginData;

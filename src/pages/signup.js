@@ -2,6 +2,7 @@ import React from 'react';
 
 import { NavLink } from 'react-router-dom';
 
+import md5 from 'md5';
 
 class UserData extends React.Component {
   constructor(props){
@@ -48,6 +49,7 @@ class UserData extends React.Component {
   // }
 
   createAccountHandler(){
+    // console.log(md5('my message?'))
 
     console.log('creating', this.state.first, 'account')
     fetch('http://localhost:8080', {
@@ -55,10 +57,10 @@ class UserData extends React.Component {
       headers: {'Content-Type': 'application/json'},
 
       body: JSON.stringify({
-        name: this.state.first,
+        name: md5(this.state.first),
         // email: this.state.email,
         // age: this.state.age,
-        password: this.state.password
+        password: md5(this.state.password)
       }),
     })
 
@@ -128,16 +130,4 @@ class UserData extends React.Component {
 
 
 
-
-
-const Signup = function() {
-    return (
-       <div>
-          <h1>Create an Account Below</h1>
-          <p>see below</p>
-          <UserData />
-       </div>
-    );
-}
-
-export default Signup;
+export default UserData;
