@@ -7,6 +7,10 @@ import md5 from 'md5';
 
 // import Constants from '../utils/constants'
 
+import { Button, TextField } from '@material-ui/core';
+
+import { NavLink } from 'react-router-dom';
+
 
 
 import Cookies from 'universal-cookie';
@@ -72,8 +76,20 @@ class LoginData extends React.Component {
         console.log('MESSAGE CHECK', res.message);
         if (res.verified === true){
           this.setState({loggedIn: true})
-          cookies.set('userID', md5(this.state.first))
+          console.log(this.state.loggedIn)
+          cookies.set('userID', md5(this.state.first) )
           this.props.checkSignIn(this.state.loggedIn)
+        }
+
+        else {
+          console.log('not verified')
+          if (res.userCorrect === true){
+            this.setState({password: ""})
+          }
+
+          else {
+            this.setState({first: "", password: ""})
+          }
         }
           })
               // for (let i = 0; i < res.test.length; i++){
@@ -96,18 +112,20 @@ class LoginData extends React.Component {
 
       //   }
 
-      // }
+      // }         {/* <NavLink to="/account">Sign In</NavLink> */}
+
 
 
     render(){
       return(
         <div>
 
-        <input
+        <TextField
         id= "loginName"
-        placeholder = "First Name"
+        label="First Name"
+        variant="outlined"
         //not exactly sure what this does
-        value = {this.state.value}
+        value = {this.state.first}
 
         //change this
 
@@ -116,27 +134,30 @@ class LoginData extends React.Component {
         }
         />
 
-        <input
-        id= "loginPassword"
-        placeholder = "Enter Password"
-        //not exactly sure what this does
-        value = {this.state.value}
-
-        //not sure if I need this
+        <TextField 
+        id="loginPassword" 
+        label="Password" 
+        variant="outlined" 
+        value = {this.state.password}
         onChange = {
           e => this.passwordChange(e)
         }
+
         />
 
-        {this.state.loggedIn ?
+        {this.props.userSignedIn ?
           <Redirect to="/account"></Redirect>: 
           <Redirect to="/signin"></Redirect>
         }
 
-        <button id="signIn" type= "submit" onClick={this.verifyLogin}>Sign In
-        {/* <NavLink restricted={true} to="/account">Sign In</NavLink> */}
 
-        </button>
+
+
+        <Button variant="contained" color="primary" onClick={this.verifyLogin}>Sign In
+
+
+
+        </Button>
 
 
         </div>

@@ -2,6 +2,10 @@ import React from 'react';
 
 import { NavLink } from 'react-router-dom';
 
+
+import { Button } from '@material-ui/core';
+
+
 // import Constants from '../utils/constants'
 
 // import Cookies from 'universal-cookie';
@@ -11,10 +15,9 @@ import { NavLink } from 'react-router-dom';
 
 
 class Navigation extends React.Component {
-   // constructor(props){
-   //    super(props);
 
-   // }
+
+
    componentDidUpdate(){
       // alert('component updated')
       console.log(this.props.userSignedIn)
@@ -27,6 +30,8 @@ class Navigation extends React.Component {
       // alert('the component loaded!')
       console.log(this.props.userSignedIn)
       // console.log(this.props.loggedIn)
+      // <button> <Link to="/signup">Create Account</Link> </button>
+
 
       // this.setState({loggedIn: JSON.parse(cookies.get(Constants.loggedIn))})
    }
@@ -36,14 +41,14 @@ class Navigation extends React.Component {
 
       return (
          <div>
-            <button> <NavLink to="/">Home</NavLink> </button>
-            <button> <NavLink to="/signup">Create Account</NavLink> </button>
-            <button> <NavLink to="/signin">Sign In</NavLink> </button>
+            <Button variant="contained" color="primary"> <NavLink className = "active" to="/">Home</NavLink> </Button>
+
+
+            <Button variant="contained" color="primary"> <NavLink className = "active" to="/signin">Sign In</NavLink> </Button>
             {this.props.userSignedIn ?
-            <button> <NavLink to="/account">Account</NavLink> </button>:
-            <span>False</span>
+            <Button variant="contained" color="primary"> <NavLink className = "active" to="/account">Account</NavLink> </Button>:
+            <Button variant="contained" color="primary"> <NavLink className = "active" to="/signup">Sign Up</NavLink> </Button>
             }
-            {/* <button id="signIn" type= "submit" onClick={this.verifyLogin}>Sign In */}
   
   
          </div>

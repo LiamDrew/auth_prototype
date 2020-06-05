@@ -11,3 +11,16 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+
+.active {
+  color: white;
+  text-decoration: none;
+  ;
+}
+
+.createAccount {
+  color: black;
+  text-decoration: none;
+}
+

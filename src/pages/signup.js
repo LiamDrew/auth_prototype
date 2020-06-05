@@ -2,6 +2,9 @@ import React from 'react';
 
 import { NavLink } from 'react-router-dom';
 
+import { Button, TextField } from '@material-ui/core';
+
+
 import md5 from 'md5';
 
 class UserData extends React.Component {
@@ -68,7 +71,7 @@ class UserData extends React.Component {
     .then(res => JSON.parse(res))
     .then(res => {
       console.log('server updated', this.state.first)
-      // console.log('recieved', res.test)
+      console.log('recieved', res.test)
     })
   }
 
@@ -77,17 +80,24 @@ class UserData extends React.Component {
 
     return (
       <div>
-        <input
+
+        <TextField
         id= "submitName"
-        placeholder = "First Name"
+        label="First Name"
         //not exactly sure what this does
         value = {this.state.value}
+
+        variant="outlined"
+
 
         //not sure if I need this
         onChange = {
           e => this.firstNameChange(e)
         }
+
+            
         />
+
 
         {/* <input
         id= "submitLastName"
@@ -101,11 +111,13 @@ class UserData extends React.Component {
         }
         /> */}
 
-        <input
+        <TextField
         id= "submitPassword"
-        placeholder = "Enter Password"
+        label="Password"
+
         //not exactly sure what this does
         value = {this.state.value}
+        variant="outlined"
 
         //not sure if I need this
         onChange = {
@@ -113,11 +125,9 @@ class UserData extends React.Component {
         }
         />
 
-        <button
-        id="giveName" type="submit" onClick={this.createAccountHandler}>
-        <NavLink to="/signin">Create Account</NavLink>
-
-        </button>
+        <Button variant="contained" onClick={this.createAccountHandler}>
+        <NavLink className = "createAccount" to="/signin">Create Account</NavLink>
+        </Button>
 
       </div>
 

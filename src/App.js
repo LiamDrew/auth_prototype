@@ -32,6 +32,7 @@ class App extends Component {
   }
 
   updateSignIn(authInput){
+    console.log('app js update getting called', authInput)
     this.setState({loggedIn: authInput})
   }
 
@@ -43,7 +44,7 @@ class App extends Component {
 
 
   render() {
-    console.log(this.state.loggedIn)
+    console.log("logged in?", this.state.loggedIn)
     return (
        <BrowserRouter>
         <div>
@@ -56,13 +57,11 @@ class App extends Component {
              <Route path="/signup">
                <UserData/>
              </Route>
-             {/* <Route path="/signin" component={SignIn}/> */}
              <Route path="/signin">
-               <LoginData checkSignIn={this.updateSignIn}/>
+               <LoginData userSignedIn = {this.state.loggedIn} checkSignIn={this.updateSignIn}/>
              </Route>
-             {/* <Route path="/account" component={Settings}/> */}
              <Route path="/account">
-               <Settings />
+               <Settings userSignedIn = {this.state.loggedIn} checkSignIn = {this.updateSignIn} />
              </Route>
 
 
