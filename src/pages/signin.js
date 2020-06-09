@@ -9,7 +9,7 @@ import md5 from 'md5';
 
 import { Button, TextField } from '@material-ui/core';
 
-import { NavLink } from 'react-router-dom';
+// import { NavLink } from 'react-router-dom';
 
 
 
@@ -25,6 +25,7 @@ class LoginData extends React.Component {
     this.state = {
       first: "",
       email: "",
+      username: "",
       password: "",
       emailMatch: null,
       passMatch: null,
@@ -37,6 +38,7 @@ class LoginData extends React.Component {
     this.passwordChange = this.passwordChange.bind(this);
 
     this.verifyLogin = this.verifyLogin.bind(this);
+    this.userNameChange = this.userNameChange.bind(this)
     // this.seeAccount = this.seeAccount.bind(this);
 
   }
@@ -53,6 +55,10 @@ class LoginData extends React.Component {
       this.setState({first: e.target.value})
     }
 
+    userNameChange(e){
+      this.setState({username: e.target.value})
+    }
+
     passwordChange(e){
       this.setState({password: e.target.value})
     }
@@ -64,7 +70,8 @@ class LoginData extends React.Component {
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
               verify: true,
-              name: md5(this.state.first),
+              profileUpdate: false,
+              username: this.state.username,
               password: md5(this.state.password)
             })
           })
@@ -77,7 +84,7 @@ class LoginData extends React.Component {
         if (res.verified === true){
           this.setState({loggedIn: true})
           console.log(this.state.loggedIn)
-          cookies.set('userID', md5(this.state.first) )
+          cookies.set('userID', this.state.username);
           this.props.checkSignIn(this.state.loggedIn)
         }
 
@@ -88,51 +95,28 @@ class LoginData extends React.Component {
           }
 
           else {
-            this.setState({first: "", password: ""})
+            this.setState({username: "", password: ""})
           }
         }
           })
-              // for (let i = 0; i < res.test.length; i++){
-              //   if (this.state.first === res.test[i].name){
-              //     alert('usernames match')
-              //     if (this.state.password === res.test[i].password){
-              //       alert('password matches, GRANTING ACCESS  ')
-              //     }
-              //     else{
-              //       alert('INCORRECT PASSWORD')
-              //     }
-              //   }
-              // }          
+    
       return (this.state.loggedIn)
       }
-
-      // seeAccount(){
-      //   this.verifyLogin()
-      //   if (this.state.loggedIn === true){
-
-      //   }
-
-      // }         {/* <NavLink to="/account">Sign In</NavLink> */}
-
-
 
     render(){
       return(
         <div>
 
-        <TextField
-        id= "loginName"
-        label="First Name"
-        variant="outlined"
-        //not exactly sure what this does
-        value = {this.state.first}
-
-        //change this
-
+      <TextField 
+        id="loginPassword" 
+        label="Username" 
+        variant="outlined" 
+        value = {this.state.username}
         onChange = {
-          e => this.firstNameChange(e)
+          e => this.userNameChange(e)
         }
-        />
+
+        />    
 
         <TextField 
         id="loginPassword" 

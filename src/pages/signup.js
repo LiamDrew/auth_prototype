@@ -2,7 +2,7 @@ import React from 'react';
 
 import { NavLink } from 'react-router-dom';
 
-import { Button, TextField } from '@material-ui/core';
+import { Button, TextField, Select, MenuItem, InputLabel, Card } from '@material-ui/core';
 
 
 import md5 from 'md5';
@@ -13,6 +13,7 @@ class UserData extends React.Component {
 
     this.state = {
       first: "",
+      username: "",
       email: "",
       age: "",
       password: "",
@@ -35,6 +36,10 @@ class UserData extends React.Component {
     this.setState({first: e.target.value})
   }
 
+  userNameChange(e){
+    this.setState({username: e.target.value})
+  }
+
   emailChange(e){
     this.setState({email: e.target.value})
   }
@@ -52,38 +57,95 @@ class UserData extends React.Component {
   // }
 
   createAccountHandler(){
+    let re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
     // console.log(md5('my message?'))
+    if (re.test(this.state.email) === true){
+      console.log('creating', this.state.first, 'account')
+      fetch('http://localhost:8080', {
+        method: 'post',
+        headers: {'Content-Type': 'application/json'},
+  
+        body: JSON.stringify({
+          verify: false,
+          profileUpdate: false,
+          first: this.state.first,
+          username: this.state.username,
+          email: this.state.email,
+          age: this.state.age,
+          password: md5(this.state.password)
+        }),
+      })
+  
+      .then(res => res.text())
+      .then(res => JSON.parse(res))
+      .then(res => {
+        console.log('server updated', this.state.first)
+        console.log('recieved', res.test)
+      })
+    }
 
-    console.log('creating', this.state.first, 'account')
-    fetch('http://localhost:8080', {
-      method: 'post',
-      headers: {'Content-Type': 'application/json'},
+    else {
+      alert('Invalid Email Address')
+    }
 
-      body: JSON.stringify({
-        name: md5(this.state.first),
-        // email: this.state.email,
-        // age: this.state.age,
-        password: md5(this.state.password)
-      }),
-    })
+    }
 
-    .then(res => res.text())
-    .then(res => JSON.parse(res))
-    .then(res => {
-      console.log('server updated', this.state.first)
-      console.log('recieved', res.test)
-    })
-  }
 
 
   render(){
 
+    let ages = Array.from(Array(100).keys())
+
+    let ageRange = ages.map((position, index) => {
+      return (
+        <MenuItem value = {index} key={index}>{position}</MenuItem>
+      )
+    })
+
+
     return (
       <div>
+        <Card className = "signupCard">
+        <TextField label="First Name" value = {this.state.value} variant="outlined"
+        onChange = {
+          e => this.firstNameChange(e)
+        } 
+        />
 
-        <TextField
-        id= "submitName"
-        label="First Name"
+      <TextField
+        label="UserName"
+        value = {this.state.value}
+        variant="outlined"
+
+
+        //not sure if I need this
+        onChange = {
+          e => this.userNameChange(e)
+        }
+
+            
+        />
+
+        <InputLabel id="demo-simple-select-label">Age</InputLabel>
+
+
+        <Select
+          labelId="demo-simple-select-label"
+         
+          variant="outlined"
+          value={this.state.age}
+          onChange={this.ageChange}
+          label="Age"
+        >
+          {ageRange}
+
+
+        </Select>
+
+
+    <TextField
+        label="Email"
         //not exactly sure what this does
         value = {this.state.value}
 
@@ -92,24 +154,15 @@ class UserData extends React.Component {
 
         //not sure if I need this
         onChange = {
-          e => this.firstNameChange(e)
+          e => this.emailChange(e)
         }
 
             
-        />
+        /> 
 
 
-        {/* <input
-        id= "submitLastName"
-        placeholder = "Email"
-        //not exactly sure what this does
-        value = {this.state.value}
 
-        //not sure if I need this
-        onChange = {
-          e => this.emailChange(e)
-        }
-        /> */}
+
 
         <TextField
         id= "submitPassword"
@@ -128,6 +181,10 @@ class UserData extends React.Component {
         <Button variant="contained" onClick={this.createAccountHandler}>
         <NavLink className = "createAccount" to="/signin">Create Account</NavLink>
         </Button>
+
+
+        </Card>
+
 
       </div>
 

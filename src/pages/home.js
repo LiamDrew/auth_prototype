@@ -23,7 +23,8 @@ class SetUser extends React.Component {
 
         this.state = {
             sessionId: "",
-            loggedIn: false
+            loggedIn: false,
+            profiles: []
         }
     }
 
@@ -35,13 +36,20 @@ class SetUser extends React.Component {
         .then(res => res.text())
         .then(res =>JSON.parse(res))
         .then(res => {
-            console.log(res)
-            console.log(this.props)
+            console.log('res', res.profiles)
+            this.setState({profiles: res.profiles})
     
 
         })
 
     }
+
+    // makeFeedList(profiles){
+    //     for (let i = 0; i< profiles.length; i++){
+
+    //     }
+
+    // }
 
     componentDidMount(){
 
@@ -51,29 +59,46 @@ class SetUser extends React.Component {
     }
 
     render(){
+        // let completedList_final = this.state.completed.map((position) => {
+        //     return (
+        //       <li key = {position}>
+        //         {position}
+        //       </li>
+        //     )
+
+        let feed = this.state.profiles.map((position, index) => {
+            if (position.name === "admin"){
+
+            }
+            else {
+                return (
+                    <div key={index}> 
+                    <Card className='userCard'>
+                        <CardContent>
+                        <Typography gutterBottom variant="h5" component="h2">
+                         {position.name}
+                        </Typography>
+                        <Typography variant="body2" color="textSecondary" component="p">
+                            About: {position.about}
+                        </Typography>
+                        </CardContent>
+                    <Button variant="contained" color="primary">{position.email}</Button>
+    
+                    </Card>
+    
+                    </div>
+                )
+
+            }
+        })
 
             return (
             
                 <div>
-                    <h1>Volunteering</h1>
-                    <p>Home page body content</p>
-                    <div>
-                    <Card className={'userCard'}>
-                        <CardContent>
-                        <Typography gutterBottom variant="h5" component="h2">
-                         Lizard
-                        </Typography>
-                        <Typography variant="body2" color="textSecondary" component="p">
-                            Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                            across all continents except Antarctica
-                        </Typography>
-                        </CardContent>
-                    <Button variant="contained" color="primary">Message</Button>
-
-                    </Card>
-
-                    </div>
-                    {/* <Box component="span"><Button /></Box> */}
+                    <Typography variant="h3">Browse Volunteers</Typography>
+                    <ol>
+                        {feed}
+                    </ol>
 
                     
                 </div>

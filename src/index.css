@@ -24,3 +24,11 @@ code {
   text-decoration: none;
 }
 
+.userCard {
+  color: red;
+}
+
+.deleteAccount {
+  color: white;
+  text-decoration: none;
+}

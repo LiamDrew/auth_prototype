@@ -2,11 +2,11 @@
 
 import React from 'react';
 
-import Constants from '../utils/constants'
+// import Constants from '../utils/constants'
 
 import Cookies from 'universal-cookie';
 
-import { Button } from '@material-ui/core';
+import { Button, TextField } from '@material-ui/core';
 
 // import { Redirect } from 'react-router-dom';
 
@@ -29,11 +29,20 @@ class Settings extends React.Component {
       email: "",
       age: "",
       password: "",
+      about: ""
       //add as necessary
     }
     this.deleteAccount = this.deleteAccount.bind(this);
     this.deleteAllAccounts = this.deleteAllAccounts.bind(this);
     this.logOut = this.logOut.bind(this);
+    this.aboutChange = this.aboutChange.bind(this)
+    this.submitAbout = this.submitAbout.bind(this)
+  }
+
+  aboutChange(e){
+    this.setState({about: e.target.value})
+
+
   }
 
   callAPI(){
@@ -68,11 +77,30 @@ class Settings extends React.Component {
     // console.log('logged in state', this.state.loggedIn)
     // this.setState({loggedIn: false})
 
-    console.log('testing bug account', this.state.loggedIn)
     this.props.checkSignIn(false);
 
     
     
+  }
+
+  submitAbout(){
+    console.log('update about called', cookies.get('userID'))
+    fetch('http://localhost:8080', {
+      method: 'post',
+      headers: {'Content-Type': 'application/json'},
+
+      body: JSON.stringify({
+        profileUpdate: true,
+        about: this.state.about,
+        username: cookies.get('userID')
+
+
+      })
+    })
+
+    alert('About description Submitted!')
+    this.setState({about: ""})
+
   }
 
   deleteAllAccounts(){
@@ -114,7 +142,8 @@ class Settings extends React.Component {
       console.log('recieved', res.test)
     })
 
-    //don't forget to bind function
+    //don't forget to bind function           <NavLink className = "deleteAccount" to="/">Delete Account</NavLink>
+
   }
   render(){
 
@@ -122,8 +151,29 @@ class Settings extends React.Component {
       <div>
         <Button variant="contained" color="primary" onClick={this.logOut}><NavLink className = "logout" to="/">Log Out</NavLink> </Button>
 
-        <Button variant="contained" color="primary" onClick={this.deleteAccount}>Delete Account</Button>
-        <Button variant="contained" color="primary" onClick={this.deleteAllAccounts}>Delete All Accounts</Button>
+        <Button variant="contained" color="primary" onClick={this.deleteAccount}>
+        <NavLink className = "deleteAccount" to="/signin">Delete Account</NavLink>
+
+        </Button>
+
+        <TextField 
+        id="about" 
+        label="About Me" 
+        variant="outlined" 
+        value = {this.state.about}
+        onChange = {
+          e => this.aboutChange(e)
+        }
+
+        />
+        <Button variant="contained" color="primary" onClick={this.submitAbout}>Submit About</Button>
+
+
+        
+        {this.name === "admin"?
+        <Button variant="contained" color="primary" onClick={this.deleteAllAccounts}>Delete All Accounts</Button>:
+        <br></br>
+        }   
 
 
       </div>

@@ -43,12 +43,11 @@ function createMaster(){
 
 
 app.get('/', function(req,res,next){
-  res.cookie('myname', 'cookievalue', {
-  })
+
   console.log("gethappend")
   profileSchema.find()
   .then(doc =>{
-    res.send({test: doc})
+    res.send({profiles: doc})
 
 
   })
@@ -61,7 +60,7 @@ app.post('/', function(req, res, next){
   console.log('POST CALLED')
 
   if (req.body.verify === true){
-    profileSchema.find({name: req.body.name})
+    profileSchema.find({username: req.body.username})
     .then(doc => {
       if (doc.length > 0){
         console.log(doc.length)
@@ -95,11 +94,15 @@ app.post('/', function(req, res, next){
     })
   }
 
-  else {
+  else if (req.body.verify === false){
     console.log('REQUEST NEW ACCOUNT MADE ')
-    console.log(req.body.name)
+    console.log('username', req.body.username)
+    profileSchema.find()
+    .then(doc =>{
+      console.log('doc', doc)
+    })
 
-    profileSchema.find({name: req.body.name})
+    profileSchema.find({username: req.body.username})
     .then(doc =>{
       console.log(doc.length)
       if (doc.length > 0){
@@ -108,12 +111,16 @@ app.post('/', function(req, res, next){
       }
 
       else {
+
+        console.log('ACCOUNT MAKING RUNNING')
         let account = new profileSchema({
           admin: false,
-          name: req.body.name,
-          // email: req.body.email,
-          // age: req.body.age,
-          password: req.body.password
+          name: req.body.first,
+          username: req.body.username,
+          email: req.body.email,
+          age: req.body.age,
+          password: req.body.password,
+          about: "test"
         })
       
         account.save()
@@ -130,6 +137,25 @@ app.post('/', function(req, res, next){
 
       }
     })
+
+  }
+
+  else if (req.body.profileUpdate === true){
+    console.log("update about running")
+
+    profileSchema.updateOne(
+      {username: req.body.username}, 
+      {$set: {about: req.body.about}},
+      {upsert: true}
+      )
+    .then(() => {
+      profileSchema.find()
+      .then(doc => {
+        console.log(doc, 'line 154, update?')
+      })
+    })
+
+
 
   }
 })
@@ -153,7 +179,16 @@ app.delete('/account', function(req, res, next){
   }
 
   else{
-    profileSchema.deleteOne({name: req.body.deleteID})
+    console.log(req.body.deleteID, typeof(req.body.deleteID))
+    profileSchema.find({username: req.body.deleteID})
+
+
+    profileSchema.deleteOne({username: req.body.deleteID})
+    .then((doc) =>{
+      console.log(doc, 'oeen')
+    })
+
+    // profileSchema.remove({username: req.body.deleteID})
 
     // account.findOneAndRemove({name: req.body.deleteID})
 

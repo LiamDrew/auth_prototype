@@ -44,10 +44,14 @@ class Navigation extends React.Component {
             <Button variant="contained" color="primary"> <NavLink className = "active" to="/">Home</NavLink> </Button>
 
 
-            <Button variant="contained" color="primary"> <NavLink className = "active" to="/signin">Sign In</NavLink> </Button>
             {this.props.userSignedIn ?
             <Button variant="contained" color="primary"> <NavLink className = "active" to="/account">Account</NavLink> </Button>:
-            <Button variant="contained" color="primary"> <NavLink className = "active" to="/signup">Sign Up</NavLink> </Button>
+            <span>
+               <Button variant="contained" color="primary"> <NavLink className = "active" to="/signin">Sign In</NavLink> </Button>
+               <Button variant="contained" color="primary"> <NavLink className = "active" to="/signup">Sign Up</NavLink> </Button>
+
+            </span>
+
             }
   
   
