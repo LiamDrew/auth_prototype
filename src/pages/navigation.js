@@ -13,7 +13,9 @@ import { Button } from '@material-ui/core';
 
 
 
-
+//this class represents the Navigation Bar at the top of the screen.
+//depending on the state of the user being logged in or not, this class displays certain navigation buttons and not others
+//(for example, if the user isnt logged in, they cant see an account button, as there is no account they are verified to navigate to)
 class Navigation extends React.Component {
 
 
@@ -37,6 +39,9 @@ class Navigation extends React.Component {
    }
 
    render(){
+
+      //renders the navbar based on the prop userSignedIn
+      //this prop is set in App.js, where the navbar component is instantiated
       
 
       return (

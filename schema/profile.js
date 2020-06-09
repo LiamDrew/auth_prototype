@@ -1,6 +1,7 @@
 let mongoose = require('mongoose');
 let validator = require('validator');
 
+//sets up profile
 let profileSchema = new mongoose.Schema({
   name: String,
   admin: Boolean,

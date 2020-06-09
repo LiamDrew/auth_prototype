@@ -1,15 +1,11 @@
-//this will need to be built out link singup.js
 
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 
 import md5 from 'md5';
 
-// import Constants from '../utils/constants'
 
 import { Button, TextField } from '@material-ui/core';
-
-// import { NavLink } from 'react-router-dom';
 
 
 
@@ -32,8 +28,7 @@ class LoginData extends React.Component {
       loggedIn: false
 
     }
-    //// NOTE: keeping the first name functionality available
-    // this.firstNameChange = this.firstNameChange.bind(this);
+//binds functions
     this.emailChange = this.emailChange.bind(this);
     this.passwordChange = this.passwordChange.bind(this);
 
@@ -46,6 +41,8 @@ class LoginData extends React.Component {
     // firstNameChange(e){
     //   this.setState({first: e.target.value})
     // }
+
+    //set state functions
 
     emailChange(e){
       this.setState({email: e.target.value})
@@ -64,6 +61,7 @@ class LoginData extends React.Component {
     }
 
     verifyLogin(){
+      //verifies login by sending the input username and password to the server
       alert('verify login running');
       fetch('http://localhost:8080', {
             method: 'post',
@@ -75,16 +73,23 @@ class LoginData extends React.Component {
               password: md5(this.state.password)
             })
           })
+          //password is send the server hashed. The database only stores the hashed password
+          //the beauty of hashing is that encrypting the same data will give you the same output every time
+          //therefore, the cleartext cant be decoded but the outputs can be compared.
 
       .then(res => res.text())
       .then(res => JSON.parse(res))
       .then(res => {
         console.log('LOGIN CHECK', res.verified);
         console.log('MESSAGE CHECK', res.message);
+        //if the server verifies the user login, I execute this code:
         if (res.verified === true){
           this.setState({loggedIn: true})
           console.log(this.state.loggedIn)
+          //I set this userID cookie, which can be accessed anywhere client side
           cookies.set('userID', this.state.username);
+          //props is a really cool thing about react. When the component is instantiated in the App class (see App.js), props can be passed to the child component
+          //in this case, the prop I passed is a callBack function, checkSignIn. This updates the state of the parent app class based on the login state of this child component
           this.props.checkSignIn(this.state.loggedIn)
         }
 
@@ -128,6 +133,8 @@ class LoginData extends React.Component {
         }
 
         />
+
+        
 
         {this.props.userSignedIn ?
           <Redirect to="/account"></Redirect>: 

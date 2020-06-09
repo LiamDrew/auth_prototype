@@ -1,4 +1,3 @@
-//this will need to be built out link singup.js
 
 import React from 'react';
 
@@ -16,7 +15,7 @@ import { NavLink } from 'react-router-dom';
 
 
 
-
+//sets up cookies to be used to find userID
 const cookies = new Cookies();
 
 class Settings extends React.Component {
@@ -32,6 +31,8 @@ class Settings extends React.Component {
       about: ""
       //add as necessary
     }
+
+    //binds functions
     this.deleteAccount = this.deleteAccount.bind(this);
     this.deleteAllAccounts = this.deleteAllAccounts.bind(this);
     this.logOut = this.logOut.bind(this);
@@ -39,12 +40,14 @@ class Settings extends React.Component {
     this.submitAbout = this.submitAbout.bind(this)
   }
 
+
+  //store the change to the about input
   aboutChange(e){
     this.setState({about: e.target.value})
 
 
   }
-
+  //gets for logging purposes, at the moment, this isnt called
   callAPI(){
     fetch('http://localhost:8080', {
           method: 'get'
@@ -66,6 +69,7 @@ class Settings extends React.Component {
   }
 
   logOut(){
+    //this clears the users cookies and redirects them to the signin page
     alert('logging out')
     let mycooks = cookies.getAll()
     console.log(cookies.getAll())
@@ -84,6 +88,7 @@ class Settings extends React.Component {
   }
 
   submitAbout(){
+    //this allows the user to submit their profile description to the server/database
     console.log('update about called', cookies.get('userID'))
     fetch('http://localhost:8080', {
       method: 'post',
@@ -104,6 +109,8 @@ class Settings extends React.Component {
   }
 
   deleteAllAccounts(){
+    //this function is only available to the admin account
+    //as noted in the comments on server.js, this poses a major security risk, but in the development phase, is useful for clearing the database
     console.log('DELETE ALL CALLED')
     fetch('http://localhost:8080/account', {
       method: 'delete',
@@ -124,6 +131,7 @@ class Settings extends React.Component {
   }
 
   deleteAccount(){
+    //this ges called when the user wants to delete their own account
     console.log('deleting', cookies.get('userID') )
     fetch('http://localhost:8080/account', {
       method: 'delete',
@@ -142,7 +150,6 @@ class Settings extends React.Component {
       console.log('recieved', res.test)
     })
 
-    //don't forget to bind function           <NavLink className = "deleteAccount" to="/">Delete Account</NavLink>
 
   }
   render(){

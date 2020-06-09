@@ -6,7 +6,9 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 
+
 import { CookiesProvider } from 'react-cookie';
+//this allows me to use cookies client side to store user data.
 
 
 

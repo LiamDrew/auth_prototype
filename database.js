@@ -1,11 +1,10 @@
-//copied from todolist project, to be changed
+//database code copied from todolist project
 
 let mongoose = require('mongoose');
 let itemModel = require('./schema/profile')
 
-//this server will likely need to be changed
 const server = '127.0.0.1:27017';
-const database = 'items';      // REPLACE WITH YOUR DB NAME (unless it's items!)
+const database = 'items'; 
 
 class Database {
   constructor() {
