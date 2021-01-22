@@ -1,3 +1,12 @@
+This project is a prototype of a Full Stack user authentication system. It is fully functional.
+
+For my front end, I used ReactJS, and for the backend, I used node/express and MongoDB. The system includes protected CRUD (Create, Read, Update, Delete) requests and MD5 password hashing to ensure security.
+
+The front end also features multiple pages and routing solutions to pass user data between these pages. The site also employs cookies to remember recent users.
+
+
+
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
